@@ -5,9 +5,9 @@ class root.CsvReader
     delete row[""]
     row
 
-  constructor: (csv_data) ->
-    @headers = _($.csvIn.toArray(csv_data)[0]).filter (colname) -> colname != ""
-    @rows    = (valid_values(row) for row in $.csvIn.toJSON(csv_data))
+  constructor: (csv_data, options) ->
+    @headers = _($.csvIn.toArray(csv_data, options)[0]).filter (colname) -> colname != ""
+    @rows    = (valid_values(row) for row in $.csvIn.toJSON(csv_data, options))
 
   is_valid_csv_file: ->
     true

@@ -1,9 +1,17 @@
 <header>Step <%= number %>: Load <%= csv %> results</header>
 
-<div style="display : block">
+<div>
   Data Source:
   <input type="radio" name="<%= csv %>_data-source" value="file" /> File
   <input type="radio" name="<%= csv %>_data-source" value="manual" /> Text
+</div>
+
+<div>
+  <fieldset>
+    <label>Delimiter</label>
+    <input class="delimiter small_text" name="<%= csv %>_delimiter" value="," />
+    <hint>Use \t for tab</hint>
+  </fieldset>
 </div>
 
 <span class='data-source file'>

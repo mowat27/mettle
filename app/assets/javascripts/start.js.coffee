@@ -112,11 +112,10 @@ run_csv_comparison_page = ->
 
   if !file_api_supported()
     $("#header").append("<div id='errors'>Some features are disabled because <a href=/browser>your browser does not support them</a>.</div>")
-    # $("#upload_files").find("input").attr("disabled", true)
     $([load_expected_step(),load_actual_step()]).each (i, step) ->
       enable_data_source(step, "manual")
       step.find("input:radio").attr("disabled", true)
-      # enable_data_source(load_actual_step(), "manual")
+
   else
     enable_data_source(load_expected_step(), "file")
     enable_data_source(load_actual_step(), "file")
@@ -140,7 +139,11 @@ run_csv_comparison_page = ->
       also.on_error() if typeof also.on_error != "undefined"
       _gaq.push(['_trackEvent', 'Compare CSV Files', step_name, 'failed'])
 
-  expected_results_callbacks = create_callbacks 'load_expected', load_expected_step, load_actual_step
+  expected_results_callbacks = create_callbacks 'load_expected', load_expected_step, load_actual_step,
+    on_success: ->
+      delimiter = load_expected_step().find("input.delimiter").val()
+      load_actual_step().find("input.delimiter").val(delimiter)
+
   actual_results_callbacks = create_callbacks 'load_actual', load_actual_step, choose_pk_step,
     on_success: ->
       create_primary_key_checkboxes comparison.column_names()
@@ -160,12 +163,16 @@ run_csv_comparison_page = ->
   $(data_load_steps).each (i, step) ->
     container = step.container
 
+    options = ->
+      delimiter = $(container).find("input.delimiter").val()
+      {delim: "#{delimiter}"}
+
     container.find("input:submit").click (evt) ->
       text = container.find("textarea").val()
-      comparison.load_pasted_results step.name, text, step.callbacks
+      comparison.load_pasted_results step.name, text, options(), step.callbacks
 
     container.find(".csv_input").change (evt) ->
-      comparison.load_results step.name, evt.target.files, step.callbacks
+      comparison.load_results step.name, evt.target.files, options(), step.callbacks
 
   $("#compare-button").click (evt) ->
     _gaq.push(['_trackEvent', 'Compare CSV Files', 'compare', 'started'])

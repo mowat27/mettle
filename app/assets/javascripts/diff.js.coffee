@@ -49,35 +49,36 @@ class root.Diff.Comparison
   column_names: ->
     @array_intersection( @expected.column_names, @actual.column_names )
 
-  load_data = (data, callbacks) ->
+  load_data = (data, options, callbacks) ->
     try
-      csv_reader = new root.CsvReader(data)
+      csv_reader = new root.CsvReader(data, options)
       json = "#{csv_reader.to_json()}\n"
       callbacks.on_success.apply(self, [json])
     catch e
       callbacks.on_error(e)
 
-  read_csv_files = (file_list, callbacks) ->
+  read_csv_files = (file_list, options, callbacks) ->
     self = this
     for file in file_list
       reader = new FileReader
 
       reader.onloadend = (evt) ->
         data = evt.target.result
-        load_data(data, callbacks)
+        load_data(data, options, callbacks)
 
       reader.readAsText(file)
 
 
-  load_results: (type, file_list, callbacks) ->
+  load_results: (type, file_list, options, callbacks) ->
     target = @expected if type == "expected"
     target = @actual if type == "actual"
 
+    options = options ? {}
     callbacks = callbacks ? {on_error: -> null}
 
     callbacks.on_start() if callbacks.on_start?
 
-    read_csv_files file_list,
+    read_csv_files options, file_list,
       on_error:
         callbacks.on_error
       on_success: (json) ->
@@ -86,15 +87,16 @@ class root.Diff.Comparison
         target.data_set = root.Diff.DataSet.create_from_json(json)
         callbacks.on_success() if callbacks.on_success?
 
-  load_pasted_results: (type, data, callbacks) ->
+  load_pasted_results: (type, data, options, callbacks) ->
     target = @expected if type == "expected"
     target = @actual if type == "actual"
 
+    options = options ? {}
     callbacks = callbacks ? {on_error: -> null}
 
     callbacks.on_start() if callbacks.on_start?
 
-    load_data data,
+    load_data data, options,
       on_error:
         callbacks.on_error
       on_success: (json) ->
