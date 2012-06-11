@@ -8,11 +8,11 @@ describe "CsvReader#is_valid_csv_file", ->
     '''
 
   it "is true", ->
-    csv_reader = new root.CsvReader(@data)
+    csv_reader = new root.MettleCsvReader(@data)
     expect(csv_reader.is_valid_csv_file()).toBeTruthy()
 
   # it "is false when blank lines in CSV data", ->
-  #   csv_reader = new root.CsvReader(@data + "\n")
+  #   csv_reader = new root.MettleCsvReader(@data + "\n")
   #   expect(csv_reader.is_valid_csv_file()).toBeFalsy()
 
 describe "CsvReader#to_json", ->
@@ -29,7 +29,7 @@ describe "CsvReader#to_json", ->
   "row_data" : [{"a":"1","b":"2","c":"3"}]
 }
 '''
-    csv_reader = new root.CsvReader(@data)
+    csv_reader = new root.MettleCsvReader(@data)
     expect(csv_reader.to_json()).toEqual(expected)
 
   it "ignores columns with empty headers", ->
@@ -45,7 +45,7 @@ describe "CsvReader#to_json", ->
   "row_data" : [{"a":"1","c":"3"},{"a":"4","c":"6"}]
 }
 '''
-    csv_reader = new root.CsvReader(@data)
+    csv_reader = new root.MettleCsvReader(@data)
     expect(csv_reader.to_json()).toEqual(expected)
 
   it "treats blanks cell values as empty strings", ->
@@ -61,7 +61,7 @@ describe "CsvReader#to_json", ->
   "row_data" : [{"a":"1","b":"","c":"3"},{"a":"4","b":"","c":"6"}]
 }
 '''
-    csv_reader = new root.CsvReader(@data)
+    csv_reader = new root.MettleCsvReader(@data)
     expect(csv_reader.to_json()).toEqual(expected)
 
   it "ignores extra data columns with no header", ->
@@ -77,6 +77,21 @@ describe "CsvReader#to_json", ->
   "row_data" : [{"a":"1","b":"2","c":"3"},{"a":"4","b":"5","c":"6"}]
 }
 '''
-    csv_reader = new root.CsvReader(@data)
+    csv_reader = new root.MettleCsvReader(@data)
     expect(csv_reader.to_json()).toEqual(expected)
+
+describe "changing the delimiter", ->
+  beforeEach ->
+    @data = '''
+"a"|"b"|"c"
+"1"|"2"|"3"
+'''
+  it "reads the headers", ->
+    csv_reader = new root.MettleCsvReader(@data, {delim: "|"})
+    expect(csv_reader.headers).toEqual(["a","b","c"])
+
+  it "reads the rows", ->
+    csv_reader = new root.MettleCsvReader(@data, {delim: "|"})
+    expect(csv_reader.rows).toEqual([{a: "1", b: "2", c: "3"}])
+
 

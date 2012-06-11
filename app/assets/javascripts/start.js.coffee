@@ -1,5 +1,7 @@
 root = global ? window
 
+root.mettle = {}
+
 on_try_it_page = ->
   $("#upload_files").length != 0
 
@@ -9,7 +11,7 @@ file_api_supported = ->
 $ ->
   run_page()
 
-comparison = new root.Diff.Comparison(["banana"])
+comparison = new root.Diff.Comparison([])
 
 initialize = ->
   $("#results_table_test").hide()
@@ -129,15 +131,18 @@ run_csv_comparison_page = ->
       mark_step_in_progress current_step
       also.on_start() if typeof also.on_start != "undefined"
       _gaq.push(['_trackEvent', 'Compare CSV Files', step_name, 'started'])
+      null
     on_success: ->
       mark_step_completed current_step
       start_step next_step
       also.on_success() if typeof also.on_success != "undefined"
       _gaq.push(['_trackEvent', 'Compare CSV Files', step_name, 'succeeded'])
+      null
     on_error: (error) ->
       mark_step_failed current_step, error
       also.on_error() if typeof also.on_error != "undefined"
       _gaq.push(['_trackEvent', 'Compare CSV Files', step_name, 'failed'])
+      null
 
   expected_results_callbacks = create_callbacks 'load_expected', load_expected_step, load_actual_step,
     on_success: ->
@@ -170,9 +175,11 @@ run_csv_comparison_page = ->
     container.find("input:submit").click (evt) ->
       text = container.find("textarea").val()
       comparison.load_pasted_results step.name, text, options(), step.callbacks
+      false
 
     container.find(".csv_input").change (evt) ->
       comparison.load_results step.name, evt.target.files, options(), step.callbacks
+      false
 
   $("#compare-button").click (evt) ->
     _gaq.push(['_trackEvent', 'Compare CSV Files', 'compare', 'started'])

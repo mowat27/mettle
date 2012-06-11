@@ -51,7 +51,7 @@ class root.Diff.Comparison
 
   load_data = (data, options, callbacks) ->
     try
-      csv_reader = new root.CsvReader(data, options)
+      csv_reader = new root.MettleCsvReader(data, options)
       json = "#{csv_reader.to_json()}\n"
       callbacks.on_success.apply(self, [json])
     catch e
@@ -78,7 +78,7 @@ class root.Diff.Comparison
 
     callbacks.on_start() if callbacks.on_start?
 
-    read_csv_files options, file_list,
+    read_csv_files file_list, options,
       on_error:
         callbacks.on_error
       on_success: (json) ->

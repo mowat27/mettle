@@ -1,6 +1,6 @@
 root = global ? window
 
-class root.CsvReader
+class root.MettleCsvReader
   valid_values = (row) ->
     delete row[""]
     row
@@ -21,5 +21,5 @@ class root.CsvReader
     """
 
 if exports?
-  exports.CsvReader = root.CsvReader
+  exports.MettleCsvReader = root.MettleCsvReader
 
