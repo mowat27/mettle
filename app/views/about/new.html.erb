@@ -2,25 +2,45 @@
 
 <h3>What is Mettle?</h3>
 
-<p>Mettle is a tool for testing big data sets.</p>
+<p>Mettle is a tool for testing big data sets in data integration and other database-heavy applications.</p>
+
+<p>We believe that that good testing tools will remove a significant barrier to entry for DI teams' Agile adoption.  However, it is a very complex problem to solve and a traditional TDD-style framework will not cut it (if it were that easy, everyone would be doing it by now).</p>
+
+<p>The right tool for the job will be...</p>
+
+<ul>
+  <li>Technology agnostic - able to interface with a variety of databases, platforms and ETL tools</li>
+  <li>Quick and easy to get started with</li>
+  <li>Simple for business people and analysts to understand - tests should be easy to create and results easy access and understand</li>
+  <li>Powerful enough for developers to do complex things</li>
+  <li>Probably using web technologies (even if they are hosted within an enterprise)</li>
+</ul>
+
+<h3>How much does Mettle cost?</h3>
+
+<p>Mettle is currently free to use.</p>
 
 <h3>How do I use Mettle?</h3>
 
 <p>Instructions are shown on our <%= link_to "main page", root_path %></p>
 
-
 <h3>How do I structure my data for Mettle to use?</h3>
 
 <p>Normal CSV files work fine - although there are some constraints
 	<ul>
-	  <li> Fields in the files must be comma separated </li>
+    <li> Fields in the files can be separated using any delimiter</li>
+	  <li> Mixed delimiters (e.g. some fields comma separated and others tab separated) are not supported</li>
     <li> Each file must have its column names in the first row </li>
 	  <li> Both files must have the same column names</li>
 	</ul>
 
-  Please <%= link_to "let us know", feedback_path %> if you have problems loading your data.
-</p>
+<p>Please <%= link_to "let us know", feedback_path %> if you have problems loading your data.</p>
+
+<h3>Are any example files available?</h3>
+
+<p> Yes, you can download example files on the <%= link_to "try mettle", try_path %> page. </p>
+
 
 <h3>Which browsers can I use?</h3>
 
-<p>Mettle uses HTML5 features that are only available in fairly modern browsers.  More information is available <%= link_to "here", static_path('browser') %>.</p>
+<p>Some of Mettle's features use HTML5 functions that are only available in some modern browsers.  More information is available <%= link_to "here", static_path('browser') %>.</p>
